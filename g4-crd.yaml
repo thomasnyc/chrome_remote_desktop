@@ -1,0 +1,44 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+---
+blueprint_name: g4-crd
+vars:
+  project_id: thomashk-mig ## Set GCP Project ID Here ##
+  deployment_name: g4-crd
+  region: us-central1
+  zone: us-central1-b
+
+deployment_groups:
+- group: primary
+  modules:
+
+  - id: network1
+    source: modules/network/pre-existing-vpc
+    settings:
+      project_id: $(vars.project_id)
+      region: us-central1
+      network_name: custom-network1
+      subnetwork_name: us-central1-subnet1-ip4
+
+  - id: remote-desktop
+    source: community/modules/remote-desktop/chrome-remote-desktop
+    use: [network1]
+    settings:
+      machine_type: g4-standard-48
+      name_prefix: gpucrd
+      disk_type: hyperdisk-balanced
+      guest_accelerator: 
+      - type: "nvidia-rtx-pro-6000"
+        count: 1
+      install_nvidia_driver: true
