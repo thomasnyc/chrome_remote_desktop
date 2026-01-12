@@ -1,4 +1,4 @@
-blueprint_name: single-vdi
+blueprint_name: t4-crd
 
 vars:
   project_id: thomashk-mig
