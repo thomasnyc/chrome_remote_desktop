@@ -6,7 +6,7 @@ This document outlines the deployment of a GPU-enabled Chrome Remote Desktop ses
 ## Advantages of this Solution
 
 1. Cloud Identity is seamlessly integrated for authentication.
-2. GPU resources are fully utilized.
+2. GPU resources are fully utilized - VirtualGL is included
 3. The Cluster toolkit provides flexibility for customizing the VM shape and integrating with storage/disk usage.
 
 Cluster toolkit link: [https://github.com/GoogleCloudPlatform/cluster-toolkit/tree/main/modules](https://github.com/GoogleCloudPlatform/cluster-toolkit/tree/main/modules)
@@ -17,7 +17,7 @@ There are 3 different Cluster Toolkit yaml files in this repo.
 
 - g4-crd.yaml - This is the latest addition to Google Cloud Platform with NVIDIA RTX Pro 6000 GPU.
 - ubuntu22-g2-crd.yaml - This leverages NVIDIA L4 GPU with Ubuntu 22 image.
-- t4-crd.yaml - This levearges NVIDIA T4 GPU with n1-standard instance. 
+- t4-crd.yaml - This leverages NVIDIA T4 GPU with n1-standard instance. 
 
 ## Installation:
 The following example are based on g4-crd.yaml blueprint. 
@@ -32,14 +32,12 @@ Step 2 - Execute the deployment:
 ```
 ./ghpc deploy g4-crd
 ```
-Wait for the confirmation message: NOTICE : The Cluster Toolkit startup scripts have finished running successfully. 
+After the machine provisioned, Login to the system and wait for the confirmation message: NOTICE : The Cluster Toolkit startup scripts have finished running successfully. 
 This can take about 10 mins. 
 
-Step 3 - Next, navigate to the Chrome Remote Desktop page: https://remotedesktop.google.com/u/2/headless
+Step 3 - Navigate to the Chrome Remote Desktop page: https://remotedesktop.google.com/u/2/headless
 Click on "Set up via SSH" and copy the Debian Linux command.
-![][image1]
-
-
+![Remote login authorization](image/image1.png)
 
 Step 4 - Run the copied command within the SSH session:
 ```
@@ -48,7 +46,11 @@ thomashk_thomashk_altostrat_com@gpucrd-0:/tmp$ DISPLAY= /opt/google/chrome-remot
 Set up a PIN when prompted:
 Enter a PIN of at least six digits:
 Enter the same PIN again:
-Successful startup messages:
+
+Wait for the message: "Host started successfully."
+
+Step 5 - Return to the Remote Access tab and log into the newly visible machine:
+![Remote Access page](image/image3.png)
 
 ## Check on the performance and tools available:
 
@@ -87,5 +89,7 @@ ls /opt/VirtualGL/bin/glxinfo
 If these two commands are not available. VirtualGL is not installed. 
 
 - basic "glxgears" command:
-
+Performance Validation:
+Running "glxgears" at almost full screen (3008 x 1692 resolution) yielded approximately 570 FPS, confirming GPU usage:
+![glxgear image](image/image2.png)
 
